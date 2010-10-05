@@ -1,0 +1,4 @@
+simple library for enabling html elements to be
+content editable and easily adding html to them
+use for instance when needing to insert custom 
+variables in a editable div
