@@ -5,18 +5,20 @@
 (function () {
   window.editable = {};
   
+  var editor;
+  
   // make an element contenteditable
   editable.enable = function (el) {
-    for (var i = 0; i < document.all.length; i++) document.all(i).unselectable = "on";
     el = (typeof el === 'string' ? document.getElementById(el) : el);
-    el.unselectable = "off";
     el.contentEditable = "true";
+    editor = el;
   };
   
   // insert html at caret / selection
   editable.insertHTML = function (html) {  
     // internet explorer
 	  if (document.selection) {
+	    editor.focus();
       var range = document.selection.createRange();
       range.pasteHTML(html);
       range.collapse(false);
