@@ -5,13 +5,27 @@
 (function () {
   window.editable = {};
   
-  var editor;
+  var editor, lastActiveElement;
+  
+  var addEventOn = function (el, evtype, handler) {
+    if (document.addEventListener) {
+      el.addEventListener(evtype, handler, false)
+    }
+    else if (document.attachEvent) {
+      el.attachEvent("on" + evtype, handler);
+    }
+  }
   
   // make an element contenteditable
   editable.enable = function (el) {
     el = (typeof el === 'string' ? document.getElementById(el) : el);
     el.contentEditable = "true";
     editor = el;
+    
+    addEventOn(editor, "focus", function () {
+      lastActiveElement = document.activeElement;
+    });
+        
   };
   
   // insert html at caret / selection
@@ -26,7 +40,9 @@
 	  }
 	  // everything else
 	  else {
-      document.execCommand('insertHTML', false, html);
+	    if (lastActiveElement === editor) {
+        document.execCommand('insertHTML', false, html);
+      }
     }
   };
   
